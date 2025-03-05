@@ -32,7 +32,19 @@
       <artifactId>spring-boot-starter-data-redis</artifactId>
       <scope>provided</scope>
     </dependency>
-
+    <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>4.0.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
+      <!-- 版本号根据你的 Spring Boot 版本来确定 -->
+      <version>3.2.3</version>
+    </dependency>
     <!-- 添加 spring-webmvc 基础依赖  -->
     <dependency>
       <groupId>org.springframework</groupId>
@@ -93,6 +105,10 @@
     <dependency>
       <groupId>io.swagger.core.v3</groupId>
       <artifactId>swagger-models-jakarta</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
     </dependency>
   </dependencies>
 
