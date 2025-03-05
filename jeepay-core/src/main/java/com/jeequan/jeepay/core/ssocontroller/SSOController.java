@@ -2,7 +2,7 @@ package com.jeequan.jeepay.core.ssocontroller;
 
 // SSOController.java
 
-import com.jeequan.jeepay.core.entity.SSOUser;
+import com.jeequan.jeepay.core.entity.SsoUser;
 import com.jeequan.jeepay.core.ssoservice.SSOTokenService;
 import com.jeequan.jeepay.core.ssoservice.SSOUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class SSOController {
 
     @PostMapping("/login")
     public String login(@RequestParam String username, @RequestParam String password) {
-        SSOUser user = userService.authenticate(username, password);
+        SsoUser user = userService.authenticate(username, password);
         if (user == null) {
             return "用户名或密码错误";
         }

@@ -20,10 +20,14 @@ import java.io.IOException;
 public class MfaAuthenticationFilter extends OncePerRequestFilter {
     private final MfaService mfaService;
 
+    public MfaAuthenticationFilter(MfaService mfaService) {
+        this.mfaService = mfaService;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+                                    FilterChain filterChain) throws IOException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.isAuthenticated() &&
                 auth.getPrincipal() instanceof CustomUserDetails user) {

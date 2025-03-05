@@ -2,7 +2,7 @@ package com.jeequan.jeepay.core.ssoservice;
 
 
 import com.jeequan.jeepay.core.dao.SSOUserDao;
-import com.jeequan.jeepay.core.entity.SSOUser;
+import com.jeequan.jeepay.core.entity.SsoUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +14,8 @@ public class SSOUserService {
     @Autowired
     private SSOUserDao userDao;
 
-    public SSOUser authenticate(String username, String password) {
-        SSOUser user = userDao.findByUsername(username);
+    public SsoUser authenticate(String username, String password) {
+        SsoUser user = userDao.findByUsername(username);
         if (user == null ||!user.getPassword().equals(password)) {
             // 记录登录失败
             userDao.insertLoginAttempt(user != null? user.getUserId() : null, "", false);
@@ -38,7 +38,7 @@ public class SSOUserService {
     }
 
     public boolean isUserLocked(Long userId) {
-        SSOUser user = userDao.findByUsername(null);
+        SsoUser user = userDao.findByUsername(null);
         if (user == null) {
             return false;
         }
