@@ -1,5 +1,6 @@
 package com.jeequan.jeepay.core.config;
 
+import com.jeequan.jeepay.core.entity.SsoUser;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;

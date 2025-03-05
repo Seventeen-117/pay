@@ -1,5 +1,9 @@
 package com.jeequan.jeepay.core.aop;
 
+import com.jeequan.jeepay.core.config.CustomUserDetails;
+import com.jeequan.jeepay.core.entity.SsoUser;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
@@ -10,26 +14,39 @@ import org.springframework.stereotype.Component;
 // SecurityAuditAspect.java
 @Aspect
 @Component
+@RequiredArgsConstructor
 public class SecurityAuditAspect {
+    private final SsoLogRepository logRepository;
+    private final HttpServletRequest request;
 
-    @AfterReturning(pointcut = "execution(* org.springframework.security.authentication.AuthenticationManager.authenticate(..))",
-            returning = "authentication")
+    @AfterReturning(
+            pointcut = "execution(* org.springframework.security.authentication.AuthenticationProvider.authenticate(..))",
+            returning = "authentication"
+    )
     public void auditSuccess(Authentication authentication) {
-        logAction(authentication.getName(), "LOGIN_SUCCESS");
+        if (authentication.getPrincipal() instanceof CustomUserDetails user) {
+            logRepository.save(new SsoLog(
+                    user.getUserId(),
+                    "LOGIN_SUCCESS",
+                    "Successful authentication",
+                    request.getRemoteAddr()
+            ));
+        }
     }
 
-    @AfterThrowing(pointcut = "execution(* org.springframework.security.authentication.AuthenticationManager.authenticate(..))",
-            throwing = "ex")
+    @AfterThrowing(
+            pointcut = "execution(* org.springframework.security.authentication.AuthenticationProvider.authenticate(..))",
+            throwing = "ex"
+    )
     public void auditFailure(AuthenticationException ex) {
         String username = ex.getAuthentication().getName();
-        logAction(username, "LOGIN_FAILURE");
-    }
-
-    private void logAction(String username, String action) {
-        SsoLog log = new SsoLog();
-        log.setUserId(userRepository.findByUsername(username).map(SsoUser::getUserId));
-        log.setActionType(action);
-        log.setDescription("Authentication attempt");
-        logRepository.save(log);
+        userRepository.findByUsername(username).ifPresent(user ->
+                logRepository.save(new SsoLog(
+                        user.getUserId(),
+                        "LOGIN_FAILURE",
+                        "Authentication failed: " + ex.getMessage(),
+                        request.getRemoteAddr()
+                ))
+        );
     }
 }
