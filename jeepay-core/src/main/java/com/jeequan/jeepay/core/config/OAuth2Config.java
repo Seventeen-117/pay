@@ -12,7 +12,28 @@ public class OAuth2Config {
 
     @Bean
     public RegisteredClientRepository registeredClientRepository() {
-        return new JdbcRegisteredClientRepository(jdbcTemplate);
+        JdbcRegisteredClientRepository registeredClientRepository =
+                new JdbcRegisteredClientRepository(jdbcTemplate);
+
+        // 初始化示例客户端（仅开发环境需要）
+        if (registeredClientRepository.findByClientId("web-app") == null) {
+            RegisteredClient webApp = RegisteredClient.withId(UUID.randomUUID().toString())
+                    .clientId("web-app")
+                    .clientSecret("{bcrypt}$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG")
+                    .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                    .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                    .redirectUri("http://localhost:8080/login/oauth2/code/web-app")
+                    .scope("user.read")
+                    .scope("user.write")
+                    .clientSettings(ClientSettings.builder()
+                            .requireAuthorizationConsent(true)
+                            .build())
+                    .build();
+
+            registeredClientRepository.save(webApp);
+        }
+
+        return registeredClientRepository;
     }
 
     @Bean

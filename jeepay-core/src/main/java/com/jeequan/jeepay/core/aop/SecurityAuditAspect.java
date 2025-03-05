@@ -1,6 +1,7 @@
 package com.jeequan.jeepay.core.aop;
 
 import com.jeequan.jeepay.core.config.CustomUserDetails;
+import com.jeequan.jeepay.core.config.SsoLogRepository;
 import com.jeequan.jeepay.core.entity.SsoUser;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class SecurityAuditAspect {
     )
     public void auditSuccess(Authentication authentication) {
         if (authentication.getPrincipal() instanceof CustomUserDetails user) {
-            logRepository.save(new SsoLog(
+            logRepository.save(new SSOLog(
                     user.getUserId(),
                     "LOGIN_SUCCESS",
                     "Successful authentication",
