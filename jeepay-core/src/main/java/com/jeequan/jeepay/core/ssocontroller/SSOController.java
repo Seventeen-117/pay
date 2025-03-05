@@ -2,8 +2,6 @@ package com.jeequan.jeepay.core.ssocontroller;
 
 // SSOController.java
 
-
-
 import com.jeequan.jeepay.core.entity.SSOUser;
 import com.jeequan.jeepay.core.ssoservice.SSOTokenService;
 import com.jeequan.jeepay.core.ssoservice.SSOUserService;
